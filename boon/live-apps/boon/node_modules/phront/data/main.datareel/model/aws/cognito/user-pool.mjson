@@ -1,0 +1,71 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "UserPool",
+            "propertyDescriptors": [
+                {"@": "id"},
+                {"@": "name"},
+                {"@": "creationDate"},
+                {"@": "modificationDate"},
+                {"@": "appClients"}
+            ],
+            "objectDescriptorModule": {
+                "%": "./user-pool.mjson"
+            },
+            "exportName": "UserPool",
+            "module": {
+                "%": "./user-pool"
+            }
+        }
+    },
+    "id": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "id",
+            "valueType": "string"
+        }
+    },
+    "name": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "name",
+            "valueType": "string"
+        }
+    },
+    "creationDate": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "creationDate",
+            "valueDescriptor": {"@": "DateDescriptor"},
+            "mandatory": true
+        }
+    },
+    "modificationDate": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "modificationDate",
+            "valueDescriptor": {"@": "DateDescriptor"},
+             "mandatory": true
+       }
+    },
+
+    "appClients": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "appClients",
+            "cardinality": -1,
+            "valueType": "object",
+            "valueDescriptor": {"@": "AppClientDescriptor"}
+       }
+    },
+
+    "AppClientDescriptor": {
+        "object": "./user-pool-client.mjson"
+    },
+
+    "DateDescriptor": {
+        "object": "montage/core/date.mjson"
+    }
+
+}

@@ -1,0 +1,67 @@
+{
+    "root": {
+        "prototype": "../meta/module-object-descriptor",
+        "values": {
+            "name": "TimeZone",
+            "propertyDescriptors": [
+                { "@": "identifier" },
+                { "@": "location" },
+                { "@": "tznames" },
+                { "@": "latitude" },
+                { "@": "longitude" }
+            ],
+            "propertyDescriptorGroups": {
+                "all": [
+                { "@": "identifier" },
+                { "@": "location" },
+                { "@": "tznames" },
+                { "@": "latitude" },
+                { "@": "longitude" }
+                ]
+            },
+            "propertyValidationRules": {},
+            "objectDescriptorModule": { "%": "./time-zone.mjson" },
+            "exportName": "TimeZone",
+            "module": { "%": "./time-zone" },
+            "object":{ "@": "TimeZonePrototype" }
+        }
+    },
+    "TimeZonePrototype": {
+        "object": "./time-zone"
+    },
+    "identifier": {
+        "prototype": "../meta/property-descriptor",
+        "values": {
+            "name": "identifier",
+            "valueType": "string"
+        }
+    },
+    "location": {
+        "prototype": "../meta/property-descriptor",
+        "values": {
+            "name": "location",
+            "valueType": "string"
+        }
+    },
+    "tznames": {
+        "prototype": "../meta/property-descriptor",
+        "values": {
+            "name": "tznames",
+            "valueType": "string"
+        }
+    },
+    "latitude": {
+        "prototype": "../meta/property-descriptor",
+        "values": {
+            "name": "latitude",
+            "valueType": "number"
+        }
+    },
+    "longitude": {
+        "prototype": "../meta/property-descriptor",
+        "values": {
+            "name": "latitude",
+            "valueType": "number"
+        }
+    }
+}

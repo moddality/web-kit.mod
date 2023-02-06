@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  WKWebViewBrower
+
+  Created by Xingli Chen on 2022-03-29.
+  
+*/
+
+"MontageAppHomeURL" = "https://phront.local:9797/?appointment_guid=e55c2b69-0367-41ab-86d9-3ba9b00606aa&stage=local&minuteOffset=-5";
+"HomeURL" = "https://apple.com";
+"BrowserURL" = "https://phront.local:1992/?appointment_guid=e55c2b69-0367-41ab-86d9-3ba9b00606aa&stage=local&minuteOffset=-5";
+"SearchURL" = "http://www.bing.com/s?wd=%@";
+"TextSearchURL" = "http://www.bing.com/search?q=%@";
+"History_title" = "Opened tabs";

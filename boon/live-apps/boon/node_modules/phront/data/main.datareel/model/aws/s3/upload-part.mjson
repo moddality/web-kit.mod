@@ -1,0 +1,30 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "UploadPart",
+            "propertyDescriptors": [
+                {"@": "identifier"}
+            ],
+            "objectDescriptorModule": {
+                "%": "./upload-part.mjson"
+            },
+            "exportName": "UploadPart",
+            "module": {
+                "%": "./upload-part"
+            },
+            "parent":{"@": "objectDescriptor"}
+        }
+    },
+    "ObjectDescriptor": {
+        "object": "../../data-object.mjson"
+    },
+    "identifier": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "identifier",
+            "valueType": "string"
+        }
+    }
+
+}

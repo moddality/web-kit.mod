@@ -1,0 +1,30 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "MultipartUpload",
+            "propertyDescriptors": [
+                {"@": "identifier"}
+            ],
+            "objectDescriptorModule": {
+                "%": "./multipart-upload.mjson"
+            },
+            "exportName": "MultipartUpload",
+            "module": {
+                "%": "./multipart-upload"
+            },
+            "parent":{"@": "objectDescriptor"}
+        }
+    },
+    "ObjectDescriptor": {
+        "object": "../../data-object.mjson"
+    },
+    "identifier": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "identifier",
+            "valueType": "string"
+        }
+    }
+
+}

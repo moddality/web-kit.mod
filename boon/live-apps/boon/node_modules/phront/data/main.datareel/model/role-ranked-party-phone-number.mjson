@@ -1,0 +1,59 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "RoleRankedPartyPhoneNumber",
+            "propertyDescriptors": [
+                {"@": "role"},
+                {"@": "ranking"},
+                {"@": "partyPhoneNumber"}
+            ],
+            "objectDescriptorModule": {
+                "%":"./messaging-channel/party-phone-number.mjson"
+            },
+            "exportName": "PartyPhoneNumber",
+            "module": {
+                "%": "./role-ranked-party-phone-number"
+            },
+            "parent":{"@": "ObjectDescriptor"}
+        }
+    },
+    "ObjectDescriptor": {
+        "object": "./data-object.mjson"
+    },
+    "role": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "role",
+            "cardinality": 1,
+            "valueType": "object",
+            "valueDescriptor": {"@": "role-descriptor"}
+        }
+    },
+    "role-descriptor": {
+        "object": "./role.mjson"
+    },
+
+    "ranking": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "ranking",
+            "valueType": "number"
+        }
+    },
+
+    "partyPhoneNumber": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "partyPhoneNumber",
+            "valueType": "object",
+            "cardinality": 1,
+            "valueDescriptor": {"@": "PartyPhoneNumberDescriptor"},
+            "isSearchable": true
+        }
+    },
+    "PartyPhoneNumberDescriptor": {
+        "object": "./messaging-channel/party-phone-number.mjson"
+    }
+
+}

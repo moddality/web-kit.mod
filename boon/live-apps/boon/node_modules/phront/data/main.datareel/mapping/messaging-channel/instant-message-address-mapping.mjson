@@ -1,0 +1,25 @@
+{
+    "root": {
+        "prototype": "montage/data/service/expression-data-mapping",
+        "values": {
+            "objectDescriptor": {"@": "InstantMessageAddressDescriptor"},
+            "objectMapping": {
+                "rules": {
+                    "serviceName": {"<->": "serviceName"},
+                    "userName": {"<->": "userName"}
+                }
+            },
+            "rawDataMapping": {
+                "rules": {
+                }
+            },
+            "requisitePropertyNames": [
+                "serviceName","userName"
+            ]
+        }
+    },
+
+    "InstantMessageAddressDescriptor": {
+        "object": "../../model/messaging-channel/instant-message-address.mjson"
+    }
+}

@@ -1,0 +1,103 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "Asset",
+            "propertyDescriptors": [
+                {"@": "s3BucketName"},
+                {"@": "s3Bucket"},
+                {"@": "s3ObjectKey"},
+                {"@": "s3Object"},
+                {"@": "description"},
+                {"@": "s3Location"},
+                {"@": "signedS3Location"},
+                {"@": "originLocation"}
+            ],
+            "objectDescriptorModule": {
+                "%":"./asset.mjson"
+            },
+            "exportName": "Asset",
+            "module": {
+                "%": "./asset"
+            },
+            "object":{"@": "AssetPrototype"},
+            "parent":{"@": "objectDescriptor"}
+        }
+    },
+    "AssetPrototype": {
+        "object": "./asset"
+    },
+    "objectDescriptor": {
+        "object": "./data-object.mjson"
+    },
+    "s3BucketName": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "s3BucketName",
+            "valueType": "string"
+        }
+    },
+    "s3Bucket": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "s3Bucket",
+            "cardinality": 1,
+            "valueType": "object",
+            "valueDescriptor": {"@": "BucketDescriptor"}
+       }
+    },
+    "BucketDescriptor": {
+        "object": "./aws/s3/bucket.mjson"
+    },
+
+     "s3ObjectKey": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "s3ObjectKey",
+            "valueType": "string"
+        }
+    },
+    "s3Object": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "s3Object",
+            "valueType": "object",
+            "valueDescriptor": {"@": "S3ObjectDescriptor"}
+        }
+    },
+    "S3ObjectDescriptor": {
+        "object": "./aws/s3/object.mjson"
+    },
+
+    "description": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "description",
+            "isLocalizable": true,
+            "valueType": "string"
+        }
+    },
+    "s3Location": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "s3Location",
+            "valueType": "URL"
+        }
+    },
+    "signedS3Location": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "signedS3Location",
+            "definition": "s3Object.signedUrl",
+            "valueType": "URL"
+        }
+    },
+    "originLocation": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "originLocation",
+            "valueType": "URL"
+        }
+    }
+
+}

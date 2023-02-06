@@ -1,0 +1,107 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "UserPoolClient",
+            "propertyDescriptors": [
+                {"@": "clientId"},
+                {"@": "userPoolId"},
+                {"@": "userPool"},
+                {"@": "clientName"},
+                {"@": "generateSecret"},
+                {"@": "clientSecret"},
+                {"@": "refreshTokenValidity"},
+                {"@": "accessTokenValidity"},
+                {"@": "idTokenValidity"},
+                {"@": "tokenValidityUnits"}
+            ],
+            "objectDescriptorModule": {
+                "%": "./user-pool-client.mjson"
+            },
+            "exportName": "UserPoolClient",
+            "module": {
+                "%": "./user-pool-client"
+            }
+        }
+    },
+    "clientId": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "clientId",
+            "valueType": "string"
+        }
+    },
+    "userPoolId": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "userPoolId",
+            "valueType": "string"
+        }
+    },
+    "userPool": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "userPool",
+            "cardinality": 1,
+            "valueType": "object",
+            "valueDescriptor": {"@": "UserPoolDescriptor"},
+            "inversePropertyName": "UserPoolClients"
+       }
+    },
+    "UserPoolDescriptor": {
+        "object": "./user-pool.mjson"
+    },
+    "clientName": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "clientName",
+            "valueType": "string"
+        }
+    },
+    "generateSecret": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "generateSecret",
+            "valueType": "boolean"
+        }
+    },
+    "clientSecret": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "clientSecret",
+            "valueType": "string"
+        }
+    },
+    "refreshTokenValidity": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "refreshTokenValidity",
+            "valueType": "number"
+        }
+    },
+    "accessTokenValidity": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "accessTokenValidity",
+            "valueType": "number"
+        }
+    },
+    "idTokenValidity": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "idTokenValidity",
+            "valueType": "number"
+        }
+    },
+    "tokenValidityUnits": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "tokenValidityUnits",
+            "cardinality": -1,
+            "valueDescriptor": {"@": "MapDescriptor"}
+       }
+    },
+    "MapDescriptor": {
+        "object": "global[Map]"
+    }
+}

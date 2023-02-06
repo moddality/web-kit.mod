@@ -1,0 +1,36 @@
+{
+    "name": "boon",
+    "version": "0.1.0",
+    "description": "application",
+    "dependencies": {
+        "montage": "github:marchant/montage#montage-19",
+        "montage-geo": "github:marchant/montage-geo.git#montage-19",
+        "phront": "github:PhrontHQ/phront#master"
+    },
+    "devDependencies": {
+        "jshint": "^2.9.5",
+        "mop": "github:marchant/mop.git#montage-19"
+    },
+    "scripts": {
+        "lint": "jshint .",
+        "build": "node node_modules/mop/optimize . --optimize 1 -target .serverless",
+        "serve": "node_modules/http-server/bin/http-server -p 9797 -S -C node_modules/phront/dev/local-ssl-certificate-authority/phront.local.crt -K node_modules/phront/dev/local-ssl-certificate-authority/phront.local.key",
+        "start": "minit serve",
+        "start:dist": "minit serve -r dist",
+        "publish": "git checkout gh-pages && git subtree push --prefix dist origin gh-pages"
+    },
+    "exclude": [
+        "run-tests.html",
+        "launcher.html",
+        "launcher.json",
+        "mod",
+        "dev",
+        "test",
+        "server"
+    ],
+    "bundle": [
+        "ui/main.reel",
+        "data/main.datareel/main.mjson"
+    ],
+    "shard": 1
+}

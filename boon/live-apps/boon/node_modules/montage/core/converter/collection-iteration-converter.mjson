@@ -1,0 +1,37 @@
+{
+    "converter_descriptor": {
+        "object": "./converter.mjson"
+    },
+    "map": {
+        "prototype": "../meta/property-descriptor",
+        "values": {
+            "name": "map",
+            "valueType": "object",
+            "helpKey": ""
+        }
+    },
+    "root": {
+        "prototype": "../meta/module-object-descriptor",
+        "values": {
+            "name": "CollectionIterationConverter",
+            "customPrototype": false,
+            "parent": {"@": "converter_descriptor"},
+            "propertyDescriptors": [
+                {"@": "map"}
+            ],
+            "propertyDescriptorGroups": {
+                "arrayToMapConverter": [
+                    {"@": "map"}
+                ]
+            },
+            "propertyValidationRules": {},
+            "objectDescriptorModule": {
+                "%": "./collection-iteration-converter.mjson"
+            },
+            "exportName": "CollectionIterationConverter",
+            "module": {
+                "%": "./collection-iteration-converter"
+            }
+        }
+    }
+}

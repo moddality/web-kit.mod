@@ -1,0 +1,59 @@
+{
+    "root": {
+        "prototype": "montage/data/service/expression-data-mapping",
+        "values": {
+            "objectDescriptor": {"@": "AppClientDescriptor"},
+            "rawDataPrimaryKeys":["id"],
+            "objectMapping": {
+                "rules": {
+                    "name": {"<->": "name"},
+                    "identifier": {"<->": "identifier"},
+                    "credentials": {"<->": "credentials"},
+                    "userPool": {
+                        "<->": "cognitoUserPoolId",
+                        "converter": {"@": "userPool-converter"}
+                    },
+                    "application": {
+                        "<->": "applicationId",
+                        "converter": {"@": "applicationForeignKeyConverter"}
+                    },
+                    "cognitoUserPoolClient": {
+                        "<-": "{ClientId: identifier, UserPoolId: cognitoUserPoolId}",
+                        "converter": {"@": "cognitoAppClient-converter"}
+                    }
+                }
+            },
+            "rawDataMapping": {
+                "rules": {
+                }
+            },
+            "requisitePropertyNames": [
+                "name"
+            ]
+        }
+    },
+
+    "AppClientDescriptor": {
+        "object": "../../model/app/app-client.mjson"
+    },
+
+    "userPool-converter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "cognitoUserPoolId == $"
+        }
+    },
+    "cognitoAppClient-converter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "ClientId == $.ClientId && UserPoolId == $.UserPoolId"
+        }
+    },
+    "applicationForeignKeyConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "id == $"
+        }
+    }
+
+}

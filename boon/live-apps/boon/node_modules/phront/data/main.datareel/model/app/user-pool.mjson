@@ -1,0 +1,73 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "UserPool",
+            "propertyDescriptors": [
+                {"@": "name"},
+                {"@": "appClients"},
+                {"@": "cognitoUserPool"},
+                {"@": "servedOrganizations"}
+
+            ],
+            "objectDescriptorModule": {
+                "%": "./user-pool.mjson"
+            },
+            "exportName": "UserPool",
+            "module": {
+                "%": "./user-pool"
+            },
+            "parent":{"@": "DataObjectDescriptor"}
+        }
+    },
+    "DataObjectDescriptor": {
+        "object": "../data-object.mjson"
+    },
+    "name": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "name",
+            "valueType": "string"
+        }
+    },
+    "appClients": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "appClients",
+            "cardinality": -1,
+            "valueType": "object",
+            "valueDescriptor": {"@": "AppClientDescriptor"},
+            "inversePropertyName": "userPool"
+        }
+    },
+    "AppClientDescriptor": {
+        "object": "./app-client.mjson"
+    },
+    "cognitoUserPool": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "cognitoUserPool",
+            "cardinality": 1,
+            "valueType": "object",
+            "valueDescriptor": {"@": "CognitoUserPoolDescriptor"}
+       }
+    },
+    "CognitoUserPoolDescriptor": {
+        "object": "../aws/cognito/user-pool.mjson"
+    },
+    "servedOrganizations": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "servedOrganizations",
+            "cardinality": -1,
+            "valueType": "object",
+            "valueDescriptor": {"@": "OrganizationDescriptor"},
+            "inversePropertyName": "userPools",
+            "description": "The parties using a UserPool"
+       }
+    },
+    "OrganizationDescriptor": {
+        "object": "../organization.mjson"
+    }
+
+}

@@ -1,0 +1,42 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "Image",
+            "propertyDescriptors": [
+                {"@": "transformedSrc"},
+                {"@": "exifMetadata"}
+            ],
+            "objectDescriptorModule": {
+                "%":"./image.mjson"
+            },
+            "exportName": "Image",
+            "module": {
+                "%": "./image"
+            },
+            "object":{"@": "ImagePrototype"},
+            "parent":{"@": "AssetDescriptor"}
+        }
+    },
+    "ImagePrototype": {
+        "object": "./image"
+    },
+    "AssetDescriptor": {
+        "object": "./asset.mjson"
+    },
+    "transformedSrc": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "transformedSrc",
+            "valueType": "URL"
+        }
+    },
+    "exifMetadata": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "exifMetadata",
+            "valueType": "object"
+        }
+    }
+
+}

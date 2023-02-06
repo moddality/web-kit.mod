@@ -1,0 +1,30 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "Bucket",
+            "propertyDescriptors": [
+                {"@": "name"}
+            ],
+            "objectDescriptorModule": {
+                "%": "./bucket.mjson"
+            },
+            "exportName": "Bucket",
+            "module": {
+                "%": "./bucket"
+            },
+            "parent":{"@": "ObjectDescriptor"}
+        }
+    },
+    "ObjectDescriptor": {
+        "object": "../../data-object.mjson"
+    },
+    "name": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "name",
+            "valueType": "string"
+        }
+    }
+
+}

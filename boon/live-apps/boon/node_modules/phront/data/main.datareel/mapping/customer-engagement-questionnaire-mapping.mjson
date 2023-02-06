@@ -1,0 +1,81 @@
+{
+    "root": {
+        "prototype": "montage/data/service/expression-data-mapping",
+        "values": {
+            "objectDescriptor": {"@": "CustomerEngagementQuestionnaireObjectDescriptor"},
+            "rawDataPrimaryKeys":["id"],
+            "objectMapping": {
+                "rules": {
+                    "services": {
+                        "<->": "id",
+                        "converter": {"@": "servicesForeignKeyConverter"}
+                    },
+                    "organization": {
+                        "<->": "organizationId",
+                        "converter": {"@": "organizationsForeignKeyConverter"}
+                    },
+                    "questionnaire": {
+                        "<->": "questionnaireId",
+                        "converter": {"@": "questionnaireForeignKeyConverter"}
+                    },
+                    "rolesRequiredToComplete": {
+                        "<->": "roleIdsRequiredToComplete",
+                        "converter": {"@": "rolesRequiredToCompleteForeignKeyConverter"}
+                    },
+                    "rolesOptionalToComplete": {
+                        "<->": "roleIdsOptionalToComplete",
+                        "converter": {"@": "rolesOptionalToCompleteForeignKeyConverter"}
+                    },
+                    "participationStatusRequiredByEvent": {"<->": "participationStatusRequiredByEvent"},
+                    "participationStatusOptionalForEvent": {"<->": "participationStatusOptionalForEvent"}
+                }
+            },
+            "rawDataMapping": {
+                "rules": {
+                }
+            },
+            "requisitePropertyNames": [
+                "professionalName","professionalShortName","preparationDuration","duration","preparationDuration"
+            ]
+        }
+    },
+
+    "CustomerEngagementQuestionnaireObjectDescriptor": {
+        "object": "../model/customer-engagement-questionnaire.mjson"
+    },
+
+    "servicesForeignKeyConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "customerEngagementQuestionnaireIds.has($)"
+        }
+    },
+
+    "organizationsForeignKeyConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "id == $"
+        }
+    },
+
+    "questionnaireForeignKeyConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "id == $"
+        }
+    },
+
+    "rolesRequiredToCompleteForeignKeyConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "$.has(id)"
+        }
+    },
+
+    "rolesOptionalToCompleteForeignKeyConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "$.has(id)"
+        }
+    }
+}

@@ -1,0 +1,438 @@
+var Montage = require("montage/core/core").Montage,
+    BoundingBox = require("./bounding-box").BoundingBox,
+    Map = require("montage/core/collections/map"),
+    Set = require("montage/core/collections/set");
+
+/**
+ * A feature collection represents a group of features.  Every
+ * feature collection has a features property which is an
+ * array of its features.  The features array cannot be set directly
+ * but you may alter its content.
+ *
+ * @class
+ * @extends external:Montage
+ */
+exports.FeatureCollection = Montage.specialize(/** @lends FeatureCollection.prototype */ {
+
+    constructor: {
+        value: function FeatureCollection() {
+            this._features = [];
+            this._listenForRangeChanges();
+        }
+    },
+
+    /************************************************************
+     * Properties
+     */
+
+    /**
+     * The features within this collection.
+     * @type {Array<Feature>}
+     */
+    features: {
+        enumerable: true,
+        get: function () {
+            return this._features;
+        }
+    },
+
+    _rangeChangeCanceler: {
+        value: undefined
+    },
+
+    _listenForRangeChanges: {
+        value: function () {
+            if (!this._rangeChangeCanceler) {
+                this._rangeChangeCanceler = this._features.addRangeChangeListener(this);
+            }
+        }
+    },
+
+    _cancelRangeChangeListener: {
+        value: function () {
+            if (this._rangeChangeCanceler) {
+                this._rangeChangeCanceler();
+            }
+            this._rangeChangeCanceler = null;
+        }
+    },
+
+    /*****************************************************
+     * Serialization
+     */
+
+    serializeSelf: {
+        value: function (serializer) {
+            serializer.setProperty("features", this.features);
+        }
+    },
+
+    deserializeSelf: {
+        value: function (deserializer) {
+            var features = this.features;
+            features.splice.apply(features, [0, Infinity].concat(deserializer.getProperty("features") || []));
+        }
+    },
+
+    /**
+     * A feature collection MAY have a member named "bounds" to
+     * include information on the coordinate range for its features'
+     * geometries.
+     *
+     * @type {BoundingBox}
+     */
+    bounds: {
+        value: function () {
+            return this.features.length ? this.features.map(function (feature) {
+                return feature.geometry.bounds();
+            }).reduce(function (bounds, childBounds) {
+                if (childBounds && !bounds.equals(childBounds)) {
+                    bounds.extend(childBounds);
+                }
+                return bounds;
+            }, BoundingBox.withCoordinates(Infinity, Infinity, -Infinity, -Infinity)) : null;
+        }
+    },
+
+    _featuresMap: {
+        enumerable: false,
+        writeable: false,
+        get: function () {
+            if (!this.__featuresMap) {
+                this.__featuresMap = new Map();
+            }
+            return this.__featuresMap;
+        }
+    },
+
+    _featuresSet: {
+        enumerable: false,
+        writeable: false,
+        get: function () {
+            if (!this.__featuresSet) {
+                this.__featuresSet = new Set();
+            }
+            return this.__featuresSet;
+        }
+    },
+
+    /************************************************************
+     * Mutating the collection
+     */
+
+    /**
+     * Adds one or more features to the collection
+     * @method
+     * @param {...Feature}
+     */
+    add: {
+        value: function () {
+            var objectsToAdd = Array.prototype.slice.call(arguments);
+            this._cancelRangeChangeListener();
+            this.features.splice.apply(this.features, [this.features.length, 0].concat(objectsToAdd));
+            this._registerFeatures.apply(this, objectsToAdd);
+            this._listenForRangeChanges();
+        }
+    },
+
+    /**
+     * Removes one or more features from the collection
+     * @method
+     * @param {...Feature}
+     */
+    remove: {
+        value: function () {
+            var objectsToRemove = Array.prototype.slice.call(arguments),
+                featureSet = new Set(this.features),
+                i, length, index;
+
+            this._cancelRangeChangeListener();
+            for (i = 0, length = objectsToRemove.length; i < length; i += 1) {
+                featureSet.delete(objectsToRemove[i]);
+            }
+            this.features.splice.apply(this.features, [0, Infinity].concat(Array.from(featureSet)));
+            this._deregisterFeatures.apply(this, objectsToRemove);
+            this._listenForRangeChanges();
+        }
+    },
+
+    /************************************************************
+     * Filtering
+     */
+
+    /**
+     * Returns an array of the collection's features that intersects with the
+     * provided bounds.
+     * @method
+     * @param {BoundingBox} bounds          - The bounds to test for intersection
+     * @returns {array<Feature>} features   - The features in this collection that
+     *                                        intersects the provided bounds.
+     */
+    filter: {
+        value: function (bounds) {
+            return this.features.filter(function (feature) {
+                return feature.intersects(bounds);
+            })
+        }
+    },
+
+    makeFilterObserver: {
+        value: function (observeBounds) {
+            var self = this;
+            return function observeFilter(emit, scope) {
+                return observeBounds(function replaceBounds(bounds) {
+                    return self.observeFilter(emit, bounds);
+                }, scope);
+            }.bind(this);
+        }
+    },
+
+    observeFilter: {
+        value: function (emit, bounds) {
+            var self = this,
+                cancel,
+                boundsWestChangeListenerCanceler,
+                boundsEastChangeListenerCanceler,
+                boundsSouthChangeListenerCanceler,
+                boundsNorthChangeListenerCanceler,
+                featuresRangeChangeListenerCanceler;
+            function update() {
+                if (cancel) {
+                    cancel();
+                }
+                cancel = emit(self.filter(bounds));
+            }
+            update();
+            boundsWestChangeListenerCanceler = bounds.addPathChangeListener("xMin", update);
+            boundsEastChangeListenerCanceler = bounds.addPathChangeListener("xMax", update);
+            boundsSouthChangeListenerCanceler = bounds.addPathChangeListener("yMin", update);
+            boundsNorthChangeListenerCanceler = bounds.addPathChangeListener("yMax", update);
+            featuresRangeChangeListenerCanceler = this.features.addRangeChangeListener(function (plus, minus) {
+                if (plus.length || minus.length) {
+                    update();
+                }
+            });
+            return function cancelObserver() {
+                boundsWestChangeListenerCanceler();
+                boundsEastChangeListenerCanceler();
+                boundsSouthChangeListenerCanceler();
+                boundsNorthChangeListenerCanceler();
+                featuresRangeChangeListenerCanceler();
+                if (cancel) {
+                    cancel();
+                }
+            };
+        }
+    },
+
+    /************************************************************
+     * Collection Methods
+     */
+
+    /**
+     * Remove all the features in this collection.
+     * @method
+     */
+    clear: {
+        value: function () {
+            this.features.splice(0, Infinity);
+        }
+    },
+
+    /**
+     * Delete the feature in this collection with the specified id.
+     * @method
+     * @param {string|number} id
+     * @returns {Feature|undefined}
+     */
+    delete: {
+        value: function (id) {
+            var feature = this._featuresMap.get(id);
+            if (feature) {
+                this.remove(feature);
+            }
+            return feature;
+        }
+    },
+
+    /**
+     * Returns the feature in this collection with the specified id.
+     * @method
+     * @param {string|number} id
+     * @returns {Feature|undefined}
+     */
+    get: {
+        value: function (id) {
+            return this._featuresMap.has(id) && this._featuresMap.get(id) || undefined;
+        }
+    },
+
+    /**
+     * Whether or not the feature is in this collection.
+     * @method
+     * @param {feature} feature
+     * @returns {boolean}
+     */
+    has: {
+        value: function (feature) {
+            return this._featuresSet.has(feature);
+        }
+    },
+
+    /**
+     * Returns the number of features in this collection.
+     * @method
+     * @returns {int}
+     */
+    size: {
+        get: function () {
+            return this.features.length;
+        }
+    },
+
+    /************************************************************
+     * Observing Changes
+     */
+
+    handleRangeChange: {
+        value: function (plus, minus) {
+            this._registerFeatures.apply(this, plus);
+            this._deregisterFeatures.apply(this, minus);
+        }
+    },
+
+    addContentPropertyChangeListener: {
+        value: function (name, handler) {
+            var self = this,
+                contentPropertyChangeCancellers = this._contentPropertyChangeCancellers.get(handler) || new Map();
+            this._contentPropertyChangeListeners[name] = this._contentPropertyChangeListeners[name] || new Set();
+            this._contentPropertyChangeListeners[name].add(handler);
+            this.features.forEach(function (feature) {
+                var cancel = feature.addOwnPropertyChangeListener(name, handler);
+                contentPropertyChangeCancellers.set(feature, cancel);
+            });
+            this._contentPropertyChangeCancellers.set(handler, contentPropertyChangeCancellers);
+            return function cancel() {
+                contentPropertyChangeCancellers.forEach(function (canceller) {
+                    canceller();
+                });
+                self._contentPropertyChangeCancellers.delete(handler);
+            };
+        }
+    },
+
+    _contentPropertyChangeCancellers: {
+        get: function () {
+            if (!this.__contentPropertyChangeCancellers) {
+                this.__contentPropertyChangeCancellers = new Map();
+            }
+            return this.__contentPropertyChangeCancellers;
+        }
+    },
+
+    _contentPropertyChangeListeners: {
+        get: function () {
+            if (!this.__contentPropertyChangeListeners) {
+                this.__contentPropertyChangeListeners = {};
+            }
+            return this.__contentPropertyChangeListeners;
+        }
+    },
+
+    _deregisterFeatures: {
+        value: function () {
+            var i, length;
+            for (i = 0, length = arguments.length; i < length; i += 1) {
+                this._deregisterFeature(arguments[i]);
+            }
+        }
+    },
+
+    _deregisterFeature: {
+        value: function (feature) {
+            if (this._featuresSet.has(feature)) this._featuresSet.delete(feature);
+            if (feature.id && this._featuresMap.has(feature.id)) this._featuresMap.delete(feature.id);
+            this._removePropertyChangeObservers(feature);
+        }
+    },
+
+    _deregisterDuplicate: {
+        value: function (feature) {
+            var id = feature.id,
+                duplicate = this._featuresMap.get(id);
+            if (duplicate && duplicate !== feature) {
+                this.remove(duplicate);
+                // for some reason remove will not trigger the range change listener
+                // in this case?
+                // TODO: Determine why this is necessary
+                this._featuresSet.delete(duplicate);
+                this._removePropertyChangeObservers(duplicate);
+            }
+        }
+    },
+
+    _registerFeatures: {
+        value: function () {
+            var i, length;
+            for (i = 0, length = arguments.length; i < length; i += 1) {
+                this._registerFeature(arguments[i]);
+            }
+        }
+    },
+
+    _registerFeature: {
+        value: function (feature) {
+            if (!this._featuresSet.has(feature)) this._featuresSet.add(feature);
+            if (feature.id) {
+                this._deregisterDuplicate(feature);
+                this._featuresMap.set(feature.id, feature);
+                this._addPropertyChangeObservers(feature);
+            }
+        }
+    },
+
+    _addPropertyChangeObservers: {
+        value: function (feature) {
+            var self = this,
+                propertyName, handlers;
+            for (propertyName in this._contentPropertyChangeListeners) {
+                handlers = this._contentPropertyChangeListeners[propertyName];
+                handlers.forEach(function (handler) {
+                    var contentPropertyChangeCancellers = self._contentPropertyChangeCancellers.get(handler) || new Map(),
+                        cancel = feature.addOwnPropertyChangeListener(propertyName, handler);
+                    contentPropertyChangeCancellers.set(feature, cancel);
+                    self._contentPropertyChangeCancellers.set(handler, contentPropertyChangeCancellers)
+                });
+            }
+        }
+    },
+
+    _removePropertyChangeObservers: {
+        value: function (feature) {
+            this._contentPropertyChangeCancellers.forEach(function (cancelMap) {
+                var cancel = cancelMap.get(feature);
+                cancel && cancel();
+                cancelMap.delete(feature);
+            });
+        }
+    }
+
+}, {
+
+    withGeoJSON: {
+        value: function (json, projection) {
+            var features = json.features.map(function (feature) {
+
+            });
+        }
+    },
+
+    withFeatures: {
+        value: function (features) {
+            var self = new this();
+            self.add.apply(self, features || []);
+            return self;
+        }
+    }
+
+});

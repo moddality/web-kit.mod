@@ -1,0 +1,57 @@
+{
+    "root": {
+        "prototype": "montage/data/service/expression-data-mapping",
+        "values": {
+            "objectDescriptor": {"@": "UserIdentityDescriptor"},
+            "rawDataPrimaryKeys":["id"],
+            "objectMapping": {
+                "rules": {
+                    "username": {"<->": "username"},
+                    "session": {"<-": "signInUserSession"},
+                    "isAuthenticated": {"<-": "signInUserSession.defined()"},
+                    "isMfaEnabled": {"<->": "isSmsMfaEnabled"},
+                    "firstName": {"<->": "firstName"},
+                    "lastName": {"<->": "lastName"},
+                    "email": {"<->": "email"},
+                    "phone": {"<->": "phone_number"},
+                    "tags": {"<->": "tags"},
+                    "locale": {"<->": "locale"},
+                    "timeZone": {
+                        "<->": "zoneinfo",
+                        "converter":  {"@": "timeZoneConverter"}
+                    },
+                    "person": {
+                        "<->": "id",
+                        "converter": {"@": "person-converter"}
+                    }
+
+                }
+            },
+            "rawDataMapping": {
+                "rules": {
+                    "confirmationCode": {"<-": "accountConfirmationCode"},
+                    "password": {"<-": "password"}
+                }
+            },
+            "requisitePropertyNames": [
+                "username","isAuthenticated","email"
+            ]
+        }
+    },
+
+    "timeZoneConverter": {
+        "prototype": "montage/data/converter/time-zone-identifier-to-time-zone-converter"
+    },
+
+    "UserIdentityDescriptor": {
+        "object": "../../model/app/user-identity.mjson"
+    },
+
+    "person-converter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "userIdentityIds.has($)"
+        }
+    }
+
+}

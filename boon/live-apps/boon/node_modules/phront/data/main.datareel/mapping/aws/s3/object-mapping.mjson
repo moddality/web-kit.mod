@@ -1,0 +1,70 @@
+{
+    "root": {
+        "prototype": "montage/data/service/expression-data-mapping",
+        "values": {
+            "objectDescriptor": {"@": "Object"},
+            "primaryKeyPropertyDescriptors": [
+                {"@": "Bucket"},
+                {"@": "Key"}
+            ],
+            "objectMapping": {
+                "rules": {
+                    "key": {"<->": "Key"},
+                    "bucketName": {"<->": "Bucket"},
+                    "contentType": {"<->": "ContentType"},
+                    "contentLength": {"<->": "ContentLength"},
+                    "content": {"<->": "Body"},
+                    "bucket": {
+                        "<->": "Bucket",
+                        "converter": {"@": "bucket-converter"}
+                    },
+                    "modificationDate": {
+                        "<->": "LastModified",
+                        "converter": {"@": "string-to-date-converter"}
+                    },
+                    "ETag": {"<->": "ETag"},
+                    "metadata": {"<->": "Metadata"}
+
+
+                }
+            },
+            "rawDataMapping": {
+                "rules": {
+                }
+            },
+            "requisitePropertyNames": [
+                "key","bucketName"
+            ]
+        }
+    },
+
+    "Object": {
+        "object": "../../../model/aws/s3/object.mjson"
+    },
+    "bucket-converter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "Bucket == $"
+        }
+    },
+    "string-to-date-converter": {
+        "prototype": "../../../converter/i-s-o-date-string-to-date-converter"
+    },
+
+    "Key": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "Key",
+            "valueType": "string"
+        }
+    },
+    "Bucket": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "Bucket",
+            "valueType": "string"
+        }
+    }
+
+
+}

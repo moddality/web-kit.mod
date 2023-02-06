@@ -1,0 +1,101 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "Object",
+            "propertyDescriptors": [
+                {"@": "key"},
+                {"@": "bucketName"},
+                {"@": "bucket"},
+                {"@": "content"},
+                {"@": "contentType"},
+                {"@": "contentLength"},
+                {"@": "ETag"},
+                {"@": "metadata"},
+                {"@": "accessControlList"}
+            ],
+            "objectDescriptorModule": {
+                "%": "./object.mjson"
+            },
+            "exportName": "Object",
+            "module": {
+                "%": "./object"
+            },
+            "parent":{"@": "ObjectDescriptor"}
+        }
+    },
+    "ObjectDescriptor": {
+        "object": "../../data-object.mjson"
+    },
+    "bucketName": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "bucketName",
+            "valueType": "string"
+        }
+    },
+    "bucket": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "bucket",
+            "cardinality": 1,
+            "valueType": "object",
+            "valueDescriptor": {"@": "BucketDescriptor"}
+       }
+    },
+    "BucketDescriptor": {
+        "object": "./bucket.mjson"
+    },
+
+    "key": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "key",
+            "valueType": "string"
+        }
+    },
+    "content": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "content",
+            "valueType": "object"
+        }
+    },
+    "contentType": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "contentType",
+            "valueType": "string"
+        }
+    },
+    "contentLength": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "contentLength",
+            "valueType": "number"
+        }
+    },
+    "ETag": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "ETag",
+            "valueType": "string"
+        }
+    },
+    "metadata": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "metadata",
+            "cardinality": 1,
+            "valueType": "object"
+        }
+    },
+    "accessControlList": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "accessControlList",
+            "cardinality": -1,
+            "valueType": "object"
+       }
+    }
+}

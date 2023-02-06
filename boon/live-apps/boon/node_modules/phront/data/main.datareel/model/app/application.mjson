@@ -1,0 +1,73 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "Application",
+            "propertyDescriptors": [
+                {"@": "name"},
+                {"@": "appClients"},
+                {"@": "controllingOrganization"},
+                {"@": "webSocketSessions"}
+            ],
+            "objectDescriptorModule": {
+                "%": "./application.mjson"
+            },
+            "exportName": "Application",
+            "module": {
+                "%": "./application"
+            },
+            "parent":{"@": "DataObjectDescriptor"}
+        }
+    },
+    "DataObjectDescriptor": {
+        "object": "../data-object.mjson"
+    },
+    "name": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "name",
+            "valueType": "string"
+        }
+    },
+    "appClients": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "appClients",
+            "cardinality": -1,
+            "valueType": "object",
+            "valueDescriptor": {"@": "AppClientDescriptor"},
+            "inversePropertyName": "application"
+       }
+    },
+    "AppClientDescriptor": {
+        "object": "./app-client.mjson"
+    },
+    "controllingOrganization": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "controllingOrganization",
+            "cardinality": 1,
+            "valueType": "object",
+            "valueDescriptor": {"@": "OrganizationDescriptor"},
+            "inversePropertyName": "applications",
+            "description": "The party owning the application. Important for security, analytics, etc... Could be a Person, an organization, any Party subclass"
+       }
+    },
+    "OrganizationDescriptor": {
+        "object": "../organization.mjson"
+    },
+    "webSocketSessions": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "webSocketSessions",
+            "cardinality": -1,
+            "valueType": "object",
+            "valueDescriptor": {"@": "WebSocketSessionsDescriptor"},
+            "inversePropertyName": "app"
+       }
+    },
+    "WebSocketSessionsDescriptor": {
+        "object": "./web-socket-session.mjson"
+    }
+
+}

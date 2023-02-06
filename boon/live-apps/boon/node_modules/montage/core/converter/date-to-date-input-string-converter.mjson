@@ -1,0 +1,25 @@
+{
+    "converter_descriptor": {
+        "object": "core/converter/converter.mjson"
+    },
+    "root": {
+        "prototype": "core/meta/module-object-descriptor",
+        "values": {
+            "name": "DateToDateInputStringConverter",
+            "customPrototype": false,
+            "parent": {
+                "@": "converter_descriptor"
+            },
+            "propertyDescriptors": [],
+            "propertyDescriptorGroups": {},
+            "propertyValidationRules": {},
+            "objectDescriptorModule": {
+                "%": "core/converter/date-to-date-input-string-converter.mjson"
+            },
+            "exportName": "DateToDateInputStringConverter",
+            "module": {
+                "%": "core/converter/date-to-date-input-string-converter"
+            }
+        }
+    }
+}

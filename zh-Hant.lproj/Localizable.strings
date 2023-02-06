@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  WKWebViewBrower
+
+  Created by Xingli Chen on 2022-03-29.
+  
+*/
+
+"HomeURL" = "http://www.bing.com";
+"SearchURL" = "http://www.bing.com/s?wd=%@";
+"TextSearchURL" = "http://www.bing.com/search?q=%@";
+"History_title" = "Opened tabs";

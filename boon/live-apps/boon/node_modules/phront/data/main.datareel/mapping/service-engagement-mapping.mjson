@@ -1,0 +1,52 @@
+{
+    "root": {
+        "prototype": "montage/data/service/expression-data-mapping",
+        "values": {
+            "objectDescriptor": {"@": "ServiceEngagementObjectDescriptor"},
+            "rawDataPrimaryKeys":["id"],
+            "objectMapping": {
+                "rules": {
+                    "serviceVariant": {
+                        "<->": "serviceVariantId",
+                        "converter": {"@": "serviceVariantToOneConverter"}
+                    },
+                    "event": {
+                        "<->": "eventId",
+                        "converter": {"@": "eventToOneConverter"}
+                    }
+                }
+            },
+            "rawDataMapping": {
+                "rules": {
+                }
+            },
+            "requisitePropertyNames": [
+                "serviceVariant","event"
+            ]
+        }
+    },
+
+    "ServiceEngagementObjectDescriptor": {
+        "object": "../model/service-engagement.mjson"
+    },
+
+    "serviceToOneConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "id == $"
+        }
+    },
+    "serviceVariantToOneConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "id == $"
+        }
+    },
+    "eventToOneConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "id == $"
+        }
+    }
+
+}

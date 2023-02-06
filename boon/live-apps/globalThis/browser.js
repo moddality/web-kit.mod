@@ -1,0 +1,4 @@
+globalThis.browser = {
+    deviceId: "%@"
+};
+

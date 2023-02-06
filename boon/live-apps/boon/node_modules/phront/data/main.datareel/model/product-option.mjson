@@ -1,0 +1,52 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "ProductOption",
+            "propertyDescriptors": [
+                {"@": "name"},
+                {"@": "position"},
+                {"@": "values"}
+            ],
+            "objectDescriptorModule": {
+                "%": "./product-option.mjson"
+            },
+            "exportName": "ProductOption",
+            "module": {
+                "%": "./product-option"
+            },
+            "object":{"@": "ProductOption"},
+            "parent":{"@": "objectDescriptor"}
+        }
+    },
+    "ProductOption": {
+        "object": "./product-option"
+    },
+    "objectDescriptor": {
+        "object": "./data-object.mjson"
+    },
+    "name": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "name",
+            "valueType": "string"
+        }
+    },
+    "position": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "position",
+            "cardinality": 1,
+            "valueType": "number"
+        }
+    },
+     "values": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "values",
+            "cardinality": -1,
+            "valueType": "string"
+        }
+    }
+
+}

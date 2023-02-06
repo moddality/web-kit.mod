@@ -1,0 +1,347 @@
+
+var Target = require("./target").Target;
+
+//Todo, to run in node, we'll need to bring in something like the ws npm package.
+
+/* A WebSocket that offers automatic reconnection and re-send of data that couldn't if closed. */
+
+var _WebSocket = global.WebSocket;
+
+if(_WebSocket) {
+    exports.WebSocket = Target.specialize({
+
+        /*
+            The constructor can throw exceptions from inside _connect():
+
+            SECURITY_ERR
+            The port to which the connection is being attempted is being blocked.
+
+        */
+        constructor: {
+            value: function (url, protocols) {
+                this._url = url;
+                this._protocols = protocols;
+                this._messageQueue = [];
+                this._webSocket = null;
+                this._isReconnecting = false;
+                this._connect();
+                return this;
+            }
+        },
+
+        _url: {
+            value: undefined
+        },
+        _protocols: {
+            value: undefined
+        },
+        _messageQueue: {
+            value: undefined
+        },
+        _webSocket: {
+            value: undefined
+        },
+        randomizeReconnectionInterval: {
+            value: false
+        },
+        reconnectionInterval: {
+            value: 300
+        },
+        reconnectionAttemptMaxCount: {
+            value: 5
+        },
+        reconnectionAttemptCount: {
+            value: 0
+        },
+        firstConnectionAttemptTime: {
+            value: undefined
+        },
+        reconnectionAttemptMaxDuration: {
+            value: 30000
+        },
+
+        /**
+ * inits a websocket by a given url, returned promise resolves with initialized websocket, rejects after failure/timeout.
+ *
+ * @param url the websocket url to init
+ * @param existingWebsocket if passed and this passed websocket is already open, this existingWebsocket is resolved, no additional websocket is opened
+ * @param timeoutMs the timeout in milliseconds for opening the websocket
+ * @param numberOfRetries the number of times initializing the socket should be retried, if not specified or 0, no retries are made
+ *        and a failure/timeout causes rejection of the returned promise
+ * @return {Promise}
+ */
+
+        /*
+function initWebsocket(url, existingWebsocket, timeoutMs, numberOfRetries) {
+    timeoutMs = timeoutMs ? timeoutMs : 1500;
+    numberOfRetries = numberOfRetries ? numberOfRetries : 0;
+    var hasReturned = false;
+    var promise = new Promise((resolve, reject) => {
+        setTimeout(function () {
+            if(!hasReturned) {
+                console.info('opening websocket timed out: ' + url);
+                rejectInternal();
+            }
+        }, timeoutMs);
+        if (!existingWebsocket || existingWebsocket.readyState != existingWebsocket.OPEN) {
+            if (existingWebsocket) {
+                existingWebsocket.close();
+            }
+            var websocket = new WebSocket(url);
+            websocket.onopen = function () {
+                if(hasReturned) {
+                    websocket.close();
+                } else {
+                    console.info('websocket to opened! url: ' + url);
+                    resolve(websocket);
+                }
+            };
+            websocket.onclose = function () {
+                console.info('websocket closed! url: ' + url);
+                rejectInternal();
+            };
+            websocket.onerror = function () {
+                console.info('websocket error! url: ' + url);
+                rejectInternal();
+            };
+        } else {
+            resolve(existingWebsocket);
+        }
+
+        function rejectInternal() {
+            if(numberOfRetries <= 0) {
+                reject();
+            } else if(!hasReturned) {
+                hasReturned = true;
+                console.info('retrying connection to websocket! url: ' + url + ', remaining retries: ' + (numberOfRetries-1));
+                initWebsocket(url, null, timeoutMs, numberOfRetries-1).then(resolve, reject);
+            }
+        }
+    });
+    promise.then(function () {hasReturned = true;}, function () {hasReturned = true;});
+    return promise;
+};
+*/
+        _connect: {
+            value: function (timeoutMs) {
+
+                if(this.firstConnectionAttemptTime === undefined) {
+                    this.firstConnectionAttemptTime = Date.now();
+                }
+
+                this._webSocket = new _WebSocket(this._url, this._protocols);
+                this._webSocket.addEventListener("error", event => this.handleEvent(event), false);
+                this._webSocket.addEventListener("open", event => this.handleEvent(event), false);
+            }
+        },
+
+        send: {
+            value: function send(data) {
+                this._messageQueue.push(data);
+                this._sendNextMessage();
+            }
+        },
+
+        _sendNextMessage: {
+            value: function () {
+                if (this._messageQueue.length) {
+                    switch (this.readyState) {
+                        case WebSocket.CONNECTING:
+                            break;
+                        case WebSocket.CLOSING:
+                        case WebSocket.CLOSED:
+                            this._reconnect();
+                            break;
+                        case WebSocket.OPEN:
+                            try {
+                                this._webSocket.send(this._messageQueue[0]);
+                                this._messageQueue.shift();
+                            } catch (e) {
+                                this._reconnect();
+                            }
+                            break;
+                    }
+                }
+            }
+        },
+
+        _reconnect: {
+            value: function () {
+                var self;
+
+                /*
+                    use navigator.onLine ?
+                */
+
+                //if (this._messageQueue.length && !this._isReconnecting) {
+                if (!this._isReconnecting/* && this.readyState !== WebSocket.OPEN*/) {
+
+                    self = this;
+                    this._webSocket = null;
+                    this._isReconnecting = true;
+                    setTimeout(function () {
+                        self.reconnectionAttemptCount++;
+                        self._connect();
+                        self._isReconnecting = false;
+                    }, (this.randomizeReconnectionInterval ? Math.random() * this.reconnectionInterval : this.reconnectionInterval));
+
+                    this.reconnectionInterval *= 2;
+                    if (this.reconnectionInterval > 3000) {
+                        this.reconnectionInterval = 3000;
+                    }
+
+                }
+            }
+        },
+
+        handleEvent: {
+            value: function (event) {
+                switch (event.type) {
+                    case "message":
+                        this.dispatchEvent(event);
+                        this._sendNextMessage();
+                    break;
+
+                    case "open":
+                        this.reconnectionInterval = 100;
+                        this.firstConnectionAttemptTime = undefined;
+                        if (this._webSocket) {
+                            this._webSocket.addEventListener("message", event => this.handleEvent(event), false);
+                            this._webSocket.addEventListener("close", event => this.handleEvent(event), false);
+                        }
+                        this.dispatchEvent(event);
+                        this._sendNextMessage();
+                    break;
+
+                    case "error":
+                        if((this.reconnectionAttemptCount < this.reconnectionAttemptMaxCount) || ((Date.now() - this.firstConnectionAttemptTime) < this.reconnectionAttemptMaxDuration ) ) {
+                            this._reconnect();
+                        } else {
+                            this.dispatchEvent(event);
+                        }
+                        break;
+
+                    default:
+                        this.dispatchEvent(event);
+                }
+            }
+        },
+        close: {
+            value: function close(code, reason) {
+                return this._webSocket.close(code, reason);
+            }
+        },
+        binaryType: {
+            get: function () {
+                return this._webSocket.binaryType;
+            },
+            set: function (value) {
+                this._webSocket.binaryType = value;
+            }
+        },
+        bufferedAmount: {
+            get: function () {
+                return this._webSocket.bufferedAmount;
+            }
+        },
+        extensions: {
+            get: function () {
+                return this._webSocket.extensions;
+            },
+            set: function (value) {
+                this._webSocket.extensions = value;
+            }
+        },
+        protocol: {
+            get: function () {
+                return this._webSocket.protocol;
+            }
+        },
+        readyState: {
+            get: function () {
+                return this._webSocket ? this._webSocket.readyState : WebSocket.CLOSED;
+            }
+        },
+
+        //Events Handlers
+        _onclose: {
+            value: undefined
+        },
+        onclose: {
+            get: function () {
+                return this._onclose;
+            },
+            set: function (eventListener) {
+                if(eventListener !== this._onclose) {
+                    this.removeEventListener("close", this._onclose, false);
+                    this._onclose = eventListener;
+                }
+                this.addEventListener("close", eventListener, false);
+            }
+        },
+        _onerror: {
+            value: undefined
+        },
+         onerror: {
+            get: function () {
+                return this._onerror;
+            },
+            set: function (eventListener) {
+                if(eventListener !== this._onerror) {
+                    this.removeEventListener("error", this._onerror, false);
+                    this._onerror = eventListener;
+                }
+                this.addEventListener("error", eventListener, false);
+            }
+        },
+       _onmessage: {
+            value: undefined
+        },
+        onmessage: {
+            get: function () {
+                return this._onmessage;
+            },
+            set: function (eventListener) {
+                if(eventListener !== this._onmessage) {
+                    this.removeEventListener("message", this._onmessage, false);
+                    this._onmessage = eventListener;
+                }
+                this.addEventListener("message", eventListener, false);
+            }
+        },
+       _onopen: {
+            value: undefined
+        },
+        onopen: {
+            get: function () {
+                return this._onopen;
+            },
+            set: function (eventListener) {
+                if(eventListener !== this._onopen) {
+                    this.removeEventListener("open", this._onopen, false);
+                    this._onopen = eventListener;
+                }
+                this.addEventListener("open", eventListener, false);
+            }
+        }
+
+    },{
+        CONNECTING:	{
+            value: 0	//The connection is not yet open.
+        },
+        OPEN: {
+            value: 1	//The connection is open and ready to communicate.
+        },
+        CLOSING: {
+            value: 2	//The connection is in the process of closing.
+        },
+        CLOSED:	{
+            value: 3	//The connection is closed or couldn't be opened.
+        }
+    });
+
+}
+else {
+    console.error("no native WebSocket implementation available");
+}
+

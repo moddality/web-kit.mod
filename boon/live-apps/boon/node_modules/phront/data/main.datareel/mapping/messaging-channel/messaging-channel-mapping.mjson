@@ -1,0 +1,38 @@
+{
+    "root": {
+        "prototype": "montage/data/service/expression-data-mapping",
+        "values": {
+            "objectDescriptor": {"@": "MessagingChannelDescriptor"},
+            "rawDataPrimaryKeys":["id"],
+            "objectMapping": {
+                "rules": {
+                   "preferredForParties": {"<->": "preferredForParties"},
+                    "description": {"<->": "description"},
+                    "tags": {"<->": "tags"},
+                    "serviceProvider": {
+                        "<->": "serviceProvider",
+                        "converter": {"@": "serviceProviderConverter"}
+                    }
+                }
+            },
+            "rawDataMapping": {
+                "rules": {
+                }
+            },
+            "requisitePropertyNames": [
+                "description","tags","originId","modificationDate"
+            ]
+        }
+    },
+
+    "MessagingChannelDescriptor": {
+        "object": "../../model/messaging-channel/messaging-channel.mjson"
+    },
+
+    "serviceProviderConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "id == $"
+        }
+    }
+}

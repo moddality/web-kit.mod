@@ -1,0 +1,43 @@
+{
+	"name": "strange",
+	"version": "1.7.2",
+	"description": "Range aka interval object. Supports exclusive and infinite ranges. Comes with an interval tree (augmented binary search tree).",
+	"keywords": [
+		"range",
+		"ranges",
+		"interval",
+		"interval-tree",
+		"bst",
+		"integer",
+		"integers",
+		"sort",
+		"bounds",
+		"math"
+	],
+	"homepage": "https://github.com/moll/js-strange",
+	"bugs": "https://github.com/moll/js-strange/issues",
+
+	"author": {
+		"name": "Andri Möll",
+		"email": "andri@dot.ee",
+		"url": "http://themoll.com"
+	},
+
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/moll/js-strange.git"
+	},
+
+	"licenses": [{
+		"type": "LAGPL",
+		"url": "https://github.com/moll/js-strange/blob/master/LICENSE"
+	}],
+
+	"main": "index.js",
+	"scripts": {"test": "make test"},
+
+	"devDependencies": {
+		"mocha": ">= 2.0.0 < 3",
+		"must": ">= 0.13.0 < 0.14"
+	}
+}

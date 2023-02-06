@@ -1,0 +1,47 @@
+{
+    "root": {
+        "prototype": "montage/data/service/expression-data-mapping",
+        "values": {
+            "objectDescriptor": {"@": "ApplicationDescriptor"},
+            "rawDataPrimaryKeys":["id"],
+            "objectMapping": {
+                "rules": {
+                    "name": {"<->": "name"},
+                    "appClients": {
+                        "<->": "id",
+                        "converter": {"@": "appClients-converter"}
+                    },
+                    "controllingOrganization": {
+                        "<->": "controllingOrganizationId",
+                        "converter": {"@": "controllingOrganizationConverter"}
+                    }
+                }
+            },
+            "rawDataMapping": {
+                "rules": {
+                }
+            },
+            "requisitePropertyNames": [
+                "name"
+            ]
+        }
+    },
+
+    "ApplicationDescriptor": {
+        "object": "../../model/app/application.mjson"
+    },
+
+    "appClients-converter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "applicationId == $"
+        }
+    },
+
+    "controllingOrganizationConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "id == $"
+        }
+    }
+}

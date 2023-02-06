@@ -1,0 +1,55 @@
+{
+    "identifier": {
+        "prototype": "./meta/property-descriptor",
+        "values": {
+            "name": "identifier",
+            "objectDescriptor": { "@": "root" },
+            "valueType": "string",
+            "helpKey": ""
+        }
+    },
+    "language": {
+        "prototype": "./meta/property-descriptor",
+        "values": {
+            "name": "language",
+            "objectDescriptor": { "@": "root" },
+            "valueType": "string",
+            "helpKey": ""
+        }
+    },
+    "region": {
+        "prototype": "./meta/property-descriptor",
+        "values": {
+            "name": "region",
+            "objectDescriptor": { "@": "root" },
+            "valueType": "string",
+            "helpKey": ""
+        }
+    },
+    "locale": {
+        "object": "./locale"
+    },
+    "root": {
+        "prototype": "./meta/module-object-descriptor",
+        "values": {
+            "name": "Locale",
+            "propertyDescriptors": [
+                { "@": "identifier" },
+                { "@": "language" },
+                { "@": "region" }
+            ],
+            "propertyDescriptorGroups": {
+                "all": [
+                    { "@": "identifier" },
+                    { "@": "language" },
+                    { "@": "region" }
+                ]
+            },
+            "propertyValidationRules": {},
+            "objectDescriptorModule": { "%": "./locale.mjson" },
+            "exportName": "Locale",
+            "module": { "%": "./locale" },
+            "object":{ "@": "locale" }
+        }
+    }
+}

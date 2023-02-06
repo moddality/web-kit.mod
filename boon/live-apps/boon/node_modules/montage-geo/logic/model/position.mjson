@@ -1,0 +1,126 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "Position",
+            "propertyDescriptors": [
+                {
+                    "@": "identifier",
+                    "@": "longitude",
+                    "@": "latitude",
+                    "@": "altitude",
+                    "@": "measure"
+                }
+            ],
+            "propertyDescriptorGroups": {
+                "Coordinates": [
+                    {
+                        "@": "longitude"
+                    },
+                    {
+                        "@": "latitude"
+                    },
+                    {
+                        "@": "altitude"
+                    },
+                    {
+                        "@": "measure"
+                    }
+                ]
+            },
+            "propertyValidationRules": {},
+            "objectDescriptorModule": {
+                "%": "./position.mjson"
+            },
+            "exportName": "Position",
+            "module": {
+                "%": "./position"
+            },
+            "object":{"@": "position"}
+        }
+    },
+
+    "position": {
+        "object": "./position"
+    },
+
+    "identifier": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "identifier",
+            "objectDescriptor": {
+                "@": "root"
+            },
+            "cardinality": 1,
+            "mandatory": false,
+            "denyDelete": false,
+            "readOnly": false,
+            "valueType": "string",
+            "helpKey": ""
+        }
+    },
+    "longitude": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "longitude",
+            "objectDescriptor": {
+                "@": "root"
+            },
+            "cardinality": 1,
+            "mandatory": true,
+            "denyDelete": false,
+            "readOnly": false,
+            "valueType": "number",
+            "enumValues": [],
+            "helpKey": ""
+        }
+    },
+    "latitude": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "latitude",
+            "objectDescriptor": {
+                "@": "root"
+            },
+            "cardinality": 1,
+            "mandatory": true,
+            "denyDelete": false,
+            "readOnly": false,
+            "valueType": "number",
+            "enumValues": [],
+            "helpKey": ""
+        }
+    },
+    "altitude": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "altitude",
+            "objectDescriptor": {
+                "@": "root"
+            },
+            "cardinality": 1,
+            "mandatory": false,
+            "denyDelete": false,
+            "readOnly": true,
+            "valueType": "number",
+            "enumValues": [],
+            "helpKey": ""
+        }
+    },
+    "measure": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "measure",
+            "objectDescriptor": {
+                "@": "root"
+            },
+            "cardinality": 1,
+            "mandatory": false,
+            "denyDelete": false,
+            "readOnly": false,
+            "valueType": "number",
+            "enumValues": [],
+            "helpKey": ""
+        }
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "Storefront",
+            "propertyDescriptors": [
+                {"@": "name"}
+            ],
+            "objectDescriptorModule": {
+                "%": "./storefront.mjson"
+            },
+            "exportName": "Storefront",
+            "module": {
+                "%": "./storefront"
+            },
+            "object":{"@": "storefront"}
+      }
+    },
+    "storefront": {
+        "object": "./storefront"
+    },
+    "name": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "name",
+            "valueType": "string"
+        }
+    }
+}

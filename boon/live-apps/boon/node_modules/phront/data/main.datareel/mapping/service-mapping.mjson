@@ -1,0 +1,35 @@
+{
+    "root": {
+        "prototype": "montage/data/service/expression-data-mapping",
+        "values": {
+            "objectDescriptor": {"@": "ServiceObjectDescriptor"},
+            "rawDataPrimaryKeys":["id"],
+            "objectMapping": {
+                "rules": {
+                    "customerEngagementQuestionnaires": {
+                        "<->": "customerEngagementQuestionnaireIds",
+                        "converter": {"@": "engagementQuestionnairesConverter"}
+                    }
+                }
+            },
+            "rawDataMapping": {
+                "rules": {
+                }
+            },
+            "requisitePropertyNames": [
+            ]
+        }
+    },
+
+    "ServiceObjectDescriptor": {
+        "object": "../model/service.mjson"
+    },
+
+    "engagementQuestionnairesConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "$.has(id)"
+        }
+    }
+
+}

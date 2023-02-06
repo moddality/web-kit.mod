@@ -1,0 +1,35 @@
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "EmploymentType",
+            "propertyDescriptors": [
+                {"@": "name"}
+            ],
+            "objectDescriptorModule": {
+                "%": "./employment-type.mjson"
+            },
+            "exportName": "EmploymentType",
+            "module": {
+                "%": "./employment-type"
+            },
+            "object":{"@": "employment-type"},
+            "parent":{"@": "object_descriptor"}
+        }
+    },
+    "employment-type": {
+        "object": "./employment-type"
+    },
+    "object_descriptor": {
+        "object": "./data-object.mjson"
+    },
+    "name": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "name",
+            "valueType": "string",
+            "isLocalizable": true,
+            "cardinality": 1
+        }
+    }
+}

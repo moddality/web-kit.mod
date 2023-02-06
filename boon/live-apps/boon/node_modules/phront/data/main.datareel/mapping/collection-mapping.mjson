@@ -1,0 +1,45 @@
+{
+    "root": {
+        "prototype": "montage/data/service/expression-data-mapping",
+        "values": {
+            "objectDescriptor": {"@": "CollectionDescriptor"},
+            "rawDataPrimaryKeys":["id"],
+            "objectMapping": {
+                "rules": {
+                    "title": {"<->": "title"},
+                    "description": {"<->": "description"},
+                    "descriptionHtml": {"<->": "descriptionHtml"},
+                    "image": {"<->": "imageId",
+                                    "converter": {"@": "imageConverter"},
+                                         "debug":true},
+                    "products": {"<->": "productIds",
+                                    "converter": {"@": "productConverter"},
+                                         "debug":true}
+                }
+            },
+            "rawDataMapping": {
+                "rules": {
+                }
+            },
+            "requisitePropertyNames": [
+                "title","description","descriptionHtml","image", "products"
+            ]
+        }
+    },
+    "imageConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "id == $"
+        }
+    },
+    "productConverter": {
+        "prototype": "montage/data/converter/raw-foreign-value-to-object-converter",
+        "values": {
+            "convertExpression": "$.has(id)"
+        }
+    },
+
+    "CollectionDescriptor": {
+        "object": "../model/collection.mjson"
+    }
+}

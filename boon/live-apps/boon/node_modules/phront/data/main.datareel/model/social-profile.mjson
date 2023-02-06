@@ -1,0 +1,72 @@
+
+{
+    "root": {
+        "prototype": "montage/core/meta/module-object-descriptor",
+        "values": {
+            "name": "SocialProfile",
+            "propertyDescriptors": [
+                {"@": "serviceName"},
+                {"@": "userName"},
+                {"@": "userIdentifier"},
+                {"@": "url"},
+                {"@": "provider"}
+            ],
+            "objectDescriptorModule": {
+                "%": "./social-profile.mjson"
+            },
+            "exportName": "SocialProfile",
+            "module": {
+                "%": "./social-profile"
+            },
+            "object": {"@": "SocialProfile"},
+            "parent": {"@": "ObjectDescriptor"}
+        }
+    },
+    "SocialProfile": {
+        "object": "./social-profile"
+    },
+    "ObjectDescriptor": {
+        "object": "./data-object.mjson"
+    },
+    "serviceName": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "serviceName",
+            "valueType": "string"
+        }
+    },
+    "userName": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "userName",
+            "valueType": "string"
+        }
+    },
+    "userIdentifier": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "userIdentifier",
+            "valueType": "string"
+        }
+    },
+    "url": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "url",
+            "valueType": "URL"
+        }
+    },
+    "provider": {
+        "prototype": "montage/core/meta/property-descriptor",
+        "values": {
+            "name": "provider",
+            "valueType": "object",
+            "cardinality": -1,
+            "valueDescriptor": {"@": "OrganizationDescriptor"}
+        }
+    },
+    "OrganizationDescriptor": {
+        "object": "./organization.mjson"
+    }
+
+}

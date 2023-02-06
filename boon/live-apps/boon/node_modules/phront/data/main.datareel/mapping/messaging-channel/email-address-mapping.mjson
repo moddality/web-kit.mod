@@ -1,0 +1,24 @@
+{
+    "root": {
+        "prototype": "montage/data/service/expression-data-mapping",
+        "values": {
+            "objectDescriptor": {"@": "EmailAddressDescriptor"},
+            "objectMapping": {
+                "rules": {
+                    "email": {"<->": "email"}
+                }
+            },
+            "rawDataMapping": {
+                "rules": {
+                }
+            },
+            "requisitePropertyNames": [
+                "email"
+            ]
+        }
+    },
+
+    "EmailAddressDescriptor": {
+        "object": "../../model/messaging-channel/email-address.mjson"
+    }
+}

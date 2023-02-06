@@ -1,0 +1,76 @@
+{
+    "module_descriptor": {
+        "prototype": "./property-descriptor",
+        "values": {
+            "name": "module",
+            "objectDescriptor": {
+                "@": "root"
+            },
+            "mandatory": true,
+            "valueType": "object",
+            "valueObjectPrototypeName": "ModuleReference",
+            "valueObjectModuleId": "../module-reference",
+            "helpKey": ""
+        }
+    },
+    "exportName_descriptor": {
+        "prototype": "./property-descriptor",
+        "values": {
+            "name": "exportName",
+            "objectDescriptor": { "@": "root" },
+            "valueType": "string",
+            "helpKey": ""
+        }
+    },
+    "object_descriptor": {
+        "prototype": "./property-descriptor",
+        "values": {
+            "name": "object",
+            "objectDescriptor": {
+                "@": "root"
+            },
+            "mandatory": true,
+            "valueType": "object",
+            "helpKey": ""
+        }
+    },
+    "root": {
+        "prototype": "./module-object-descriptor",
+        "values": {
+            "name": "ModuleObjectDescriptor",
+            "customPrototype": false,
+            "propertyDescriptors": [
+                {
+                    "@": "module_descriptor"
+                },
+                {
+                    "@": "exportName_descriptor"
+                },
+                {
+                    "@": "object_descriptor"
+                }
+            ],
+            "propertyDescriptorGroups": {
+                "associations": [
+                    {
+                        "@": "module_descriptor"
+                    },
+                    {
+                        "@": "exportName_descriptor"
+                    },
+                    {
+                        "@": "object_descriptor"
+                    }
+                ]
+            },
+            "propertyValidationRules": {},
+            "objectDescriptorModule": {
+                "%": "./module-object-descriptor.mjson"
+            },
+            "exportName": "ModuleObjectDescriptor",
+            "module": {
+                "%": "./module-object-descriptor"
+            }
+        }
+    }
+}
